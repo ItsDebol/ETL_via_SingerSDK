@@ -1,0 +1,89 @@
+# tap-jsonplaceholder
+
+`tap-jsonplaceholder` is a Singer tap for extracting data from the JSONPlaceholder API with built-in data validation.
+
+Built with the [Singer SDK](https://sdk.meltano.com).
+
+## Features
+
+- Extracts data from JSONPlaceholder API endpoints:
+  - Users
+  - Posts
+  - Comments
+- Built-in data validation for each stream
+- Filtering capabilities (e.g., even-numbered IDs for posts)
+- Validation error tracking and reporting
+- Configurable validation rules
+
+
+## Key Assumptions
+
+### Data Structure Assumptions
+- JSON responses follow consistent schema across API calls
+- User IDs are unique positive integers
+- Email addresses follow standard format
+- Post IDs and Comment IDs are sequential integers
+- All text fields (title, body) contain UTF-8 encoded content
+- Timestamps not provided by API
+
+### Validation Assumptions
+- User records require valid email format
+- Post titles should not be all uppercase
+- Post body length minimum of 10 characters
+- Comment body length minimum of 10 characters
+- Address fields are required for user records
+- All IDs must be positive integers
+- Parent-child relationships must be maintained (comments -> posts)
+
+### Processing Assumptions
+- API rate limits not enforced
+- No authentication required
+- API endpoints are always available
+- Data is read-only (no PUT/POST/DELETE operations)
+- Network connectivity is stable
+- Response times are reasonable (<30s)
+- Data volume is manageable in memory
+
+### Business Logic Assumptions
+- Comments are filtered based on even-numbered post IDs
+- All users are processed regardless of ID
+- No specific order of processing required
+- delta/incremental updates are needed for automating teh flow of data
+
+## Installation
+
+```bash
+# Using pip
+pip install tap-jsonplaceholder
+
+# From source
+git clone https://github.com/your-username/tap-jsonplaceholder.git
+cd tap-jsonplaceholder
+pip install -e .
+
+Configuration
+Create a config file (config.json) with the following required properties:
+
+{
+    "api_url": "https://jsonplaceholder.typicode.com"
+}
+
+
+## Usage
+
+# Using the package directly
+tap-jsonplaceholder --config config.json --catalog catalog.json
+
+# Using with a target
+tap-jsonplaceholder --config config.json | target-csv
+
+# Install dependencies
+pip install -e ".[dev]"
+
+# Format code
+black tap_jsonplaceholder/
+
+# Lint code
+flake8 tap_jsonplaceholder/
+
+

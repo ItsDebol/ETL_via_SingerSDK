@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "tap-jsonplaceholder"
+version = "0.1.0"
+description = "Singer tap for JSONPlaceholder API"
+authors = ["Your Name <your.email@example.com>"]
+packages = [
+    { include = "tap_jsonplaceholder" }
+]
+
+[tool.poetry.dependencies]
+python = ">=3.7.1"
+singer-sdk = "^0.34.0"
+
+[tool.poetry.dev-dependencies]
+pytest = "^7.1.1"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+tap-jsonplaceholder = "tap_jsonplaceholder.tap:TapJSONPlaceholder.cli"
